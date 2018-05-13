@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Popular Movies - Stage 1</string>
+
+    <string name="sortOrder">Sort order</string>
+    <string name="mostPopular">Most Popular</string>
+    <string name="topRated">Top Rated</string>
+
 </resources>
