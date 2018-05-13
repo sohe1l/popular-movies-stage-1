@@ -5,8 +5,9 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieClickListener{
 
     private RecyclerView recyclerView;
     private MovieAdapter movieAdapter;
@@ -16,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        movieAdapter = new MovieAdapter();
+        movieAdapter = new MovieAdapter(22, this);
 
         LayoutManager layoutManager = new GridLayoutManager(this, 2);
 
@@ -24,7 +25,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(movieAdapter);
+    }
 
-
+    @Override
+    public void onMovieClick(int index) {
+        String msg = "item " + index;
+        Toast.makeText(this, msg, Toast.LENGTH_LONG ).show();
     }
 }

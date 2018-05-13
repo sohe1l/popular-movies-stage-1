@@ -11,6 +11,15 @@ import android.widget.TextView;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
 
+    final private MovieClickListener mOnMovieClickListener;
+    private int mNumberItems;
+
+
+    public MovieAdapter(int numberOfItems, MovieClickListener listener){
+        mOnMovieClickListener = listener;
+        mNumberItems = numberOfItems;
+    }
+
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -32,14 +41,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public int getItemCount() {
-        return 500;
+        return mNumberItems;
     }
 
 
 
 
 
-    class MovieViewHolder extends  RecyclerView.ViewHolder{
+    class MovieViewHolder extends  RecyclerView.ViewHolder
+        implements View.OnClickListener{
 
         TextView tv;
 
@@ -48,10 +58,23 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
             tv = (TextView) itemView.findViewById(R.id.tvtvtv);
 
+            itemView.setOnClickListener(this);
+
         }
 
         void bind(int pos){
             tv.setText(String.valueOf(pos));
         }
+
+        @Override
+        public void onClick(View v) {
+            int clickedPos = getAdapterPosition();
+            mOnMovieClickListener.onMovieClick(clickedPos);
+        }
     }
+
+    public interface MovieClickListener{
+        void onMovieClick(int index);
+    }
+
 }
