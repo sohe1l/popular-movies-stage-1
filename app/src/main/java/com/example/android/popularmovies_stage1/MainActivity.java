@@ -2,14 +2,21 @@ package com.example.android.popularmovies_stage1;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.example.android.popularmovies_stage1.utilities.NetworkUtilities;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieClickListener {
 
@@ -61,10 +68,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void setSortOrder(int orderId) {
         switch (orderId) {
             case R.string.mostPopular:
-                Toast.makeText(this, "most pop", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "most pop:" + NetworkUtilities.getPopularUrl(), Toast.LENGTH_LONG).show();
                 break;
             case R.string.topRated:
-                Toast.makeText(this, "top rated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "top rated:" + NetworkUtilities.getTopRatedUrl(), Toast.LENGTH_LONG).show();
+
+
                 break;
         }
 
@@ -86,6 +95,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(movieAdapter);
+
+
+        // TEMP TODO updating data from internet
+        new loadJsonData().execute(NetworkUtilities.getTopRatedUrl());
+
     }
 
     @Override
@@ -93,4 +107,31 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         String msg = "item " + index;
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
+
+
+    public class loadJsonData extends AsyncTask<URL, Void, String>{
+
+        @Override
+        protected String doInBackground(URL... urls) {
+            String jsonResult = "";
+            try{
+                jsonResult = NetworkUtilities.getResponseFromHttpUrl(urls[0]);
+
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+            return jsonResult;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if(s != null && !s.equals("")){
+                Log.i("TEST", s);
+            }
+        }
+
+    }
+
+
 }

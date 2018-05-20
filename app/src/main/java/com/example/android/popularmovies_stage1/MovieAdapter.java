@@ -6,7 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
@@ -29,7 +32,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         View view = inflater.inflate(R.layout.movie_item, parent, false);
 
-        MovieViewHolder viewHolder = new MovieViewHolder(view);
+        MovieViewHolder viewHolder = new MovieViewHolder(view, context);
 
         return viewHolder;
     }
@@ -52,18 +55,29 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         implements View.OnClickListener{
 
         TextView tv;
+        ImageView imageView;
+        Context context;
 
-        MovieViewHolder(View itemView) {
+        MovieViewHolder(View itemView, Context context) {
             super(itemView);
+
+            this.context = context;
 
             tv = (TextView) itemView.findViewById(R.id.tvtvtv);
 
+            imageView = (ImageView) itemView.findViewById(R.id.imgv_movie);
+
             itemView.setOnClickListener(this);
+
+
 
         }
 
         void bind(int pos){
-            tv.setText(String.valueOf(pos));
+            //tv.setText(String.valueOf(pos));
+            Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(imageView);
+
+
         }
 
         @Override
