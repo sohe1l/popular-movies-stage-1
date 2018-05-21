@@ -23,10 +23,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     private ArrayList<Movie> movies;
 
-    public MovieAdapter(int numberOfItems, MovieClickListener listener){
+    public MovieAdapter(ArrayList<Movie> movies, int numberOfItems, MovieClickListener listener){
         mOnMovieClickListener = listener;
         mNumberItems = numberOfItems;
-        movies = new ArrayList<>();
+        this.movies = movies;
     }
 
     public void setMovies(ArrayList<Movie> movies) {

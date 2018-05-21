@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_change_sort_order"
-        android:title="@string/sortOrder"
+        android:title="@string/pref_sort_title"
         app:showAsAction="collapseActionView"
 
         />
