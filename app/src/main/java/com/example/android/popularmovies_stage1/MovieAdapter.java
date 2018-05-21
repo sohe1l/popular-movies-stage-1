@@ -9,18 +9,28 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.popularmovies_stage1.model.Movie;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
-
     final private MovieClickListener mOnMovieClickListener;
+
     private int mNumberItems;
 
+
+    private ArrayList<Movie> movies;
 
     public MovieAdapter(int numberOfItems, MovieClickListener listener){
         mOnMovieClickListener = listener;
         mNumberItems = numberOfItems;
+        movies = new ArrayList<>();
+    }
+
+    public void setMovies(ArrayList<Movie> movies) {
+        this.movies = movies;
     }
 
     @NonNull
@@ -39,7 +49,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-         holder.bind(position);
+        String t = "";
+        if(movies.size() > position){
+            t = movies.get(position).getOriginal_title();
+
+        }
+
+        holder.bind(position, t);
     }
 
     @Override
@@ -73,9 +89,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         }
 
-        void bind(int pos){
-            //tv.setText(String.valueOf(pos));
-            Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(imageView);
+        void bind(int pos, String title){
+            if(movies.size() > pos){
+                tv.setText(title);
+            }
+            // Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(imageView);
 
 
         }

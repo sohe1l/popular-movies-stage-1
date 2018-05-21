@@ -43,6 +43,7 @@ public class NetworkUtilities {
         return buildURLfromURI(uri);
     }
 
+
     // ref: sunshine app
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
