@@ -2,7 +2,9 @@ package com.example.android.popularmovies_stage1;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.MatrixCursor;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -23,6 +25,7 @@ import com.example.android.popularmovies_stage1.utilities.NetworkUtilities;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieClickListener {
@@ -35,51 +38,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private ArrayList<Movie> movies;
 
+    private MovieAdapter movieAdapter;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        refreshMovies();
+    }
 
 
 
@@ -101,26 +70,26 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 final String[] listLabels = getResources().getStringArray(R.array.pref_order_labels);
                 final String[] listKeys = getResources().getStringArray(R.array.pref_order_keys);
 
-                // Get the current selected item
+                final int current_selected_key = Arrays.binarySearch(listKeys, getSortOrder());
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.pref_sort_title))
                     .setSingleChoiceItems(
                             listLabels
-                            ,getSortOrder()
+                            , current_selected_key
                             , new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    setSortOrder(which);
+                                    setSortOrder( listKeys[which] );
                                 }
                             })
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // if not the same... refresh
-
-                    }
-                });
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(current_selected_key != Arrays.binarySearch(listKeys, getSortOrder())) {
+                                refreshMovies();
+                            }
+                        }
+                    });
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -130,58 +99,28 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         return super.onOptionsItemSelected(item);
     }
 
-    private int getSortOrder() {
-        Log.wtf("TTZZ", "Getting order: " +  Integer.toString( sharedPreferences.getInt(SORT_ORDER_KEY,0) ) );
-
-        return sharedPreferences.getInt(SORT_ORDER_KEY,0);
+    /*
+        The actual key value is saved to shared preferences instead of the index
+        In this way if order of options are changed or new items are added the saved preferences will not be affected
+     */
+    private String getSortOrder() {
+        return sharedPreferences.getString(SORT_ORDER_KEY, getString(R.string.pref_sort_default_key));
     }
 
-    private void setSortOrder(int index) {
-
-        Log.wtf("TTZZ", "Setting order: " +  Integer.toString( index ) );
-
+    private void setSortOrder(String key) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(SORT_ORDER_KEY, index);
+        editor.putString(SORT_ORDER_KEY, key);
         editor.commit();
     }
 
 
-    private MovieAdapter movieAdapter;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-
-        //PREFERENCE
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        URL requestUrl;
-
-        /*
-        switch (sharedPreferences.getInt(SORT_ORDER_KEY,SORT_ORDER_DEFAULT_VALUE)) {
-            case R.string.mostPopular:
-                requestUrl = NetworkUtilities.getPopularUrl();
-                Toast.makeText(this, "most pop:" + NetworkUtilities.getPopularUrl(), Toast.LENGTH_LONG).show();
-                break;
-            case R.string.topRated:
-                requestUrl = NetworkUtilities.getTopRatedUrl();
-                Toast.makeText(this, "top rated:" + NetworkUtilities.getTopRatedUrl(), Toast.LENGTH_LONG).show();
-                break;
-            default:
-                requestUrl = null;
-        }
-
-*/
-        // TEMP TODO updating data from internet
-        // new loadJsonData().execute(requestUrl);
-    }
 
     @Override
     public void onMovieClick(int index) {
         String msg = "item " + index;
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        Intent movieDetail = new Intent(this, MovieDetailActivity.class);
+        movieDetail.putExtra(getString(R.string.movie_detail_intent_key), movies.get(index));
+        startActivity(movieDetail);
     }
 
 
@@ -208,24 +147,36 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             }
 
             movies = JsonUtilities.parseMovies(s);
-            updateMovies(movies);
+            updateMovies();
 
 
         }
     }
 
-    private void updateMovies(ArrayList<Movie> movies){
+    private void updateMovies(){
 
+        movieAdapter = new MovieAdapter(movies, this);
 
-        movieAdapter = new MovieAdapter(movies,22, this);
+        LayoutManager layoutManager;
 
-        LayoutManager layoutManager = new GridLayoutManager(this, 2);
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+             layoutManager = new GridLayoutManager(this, 2);
+        } else{
+             layoutManager = new GridLayoutManager(this, 3);
+        }
 
         recyclerView = (RecyclerView) findViewById(R.id.rv_movies);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(movieAdapter);
 
+    }
+
+
+    private void refreshMovies(){
+        new loadJsonData().execute(
+                NetworkUtilities.getUrl(getSortOrder(), this)
+        );
     }
 
 }

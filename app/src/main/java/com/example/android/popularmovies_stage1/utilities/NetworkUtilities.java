@@ -1,9 +1,12 @@
 package com.example.android.popularmovies_stage1.utilities;
 
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.android.popularmovies_stage1.BuildConfig;
+import com.example.android.popularmovies_stage1.R;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +27,17 @@ public class NetworkUtilities {
 
     private static final String API_PARAM = "api_key";
 
+
+    public static URL getUrl(String sort_order_key, Context context){
+        if(sort_order_key.equals(context.getString(R.string.pref_sort_popular_key)))
+            return NetworkUtilities.getPopularUrl();
+
+        else if(sort_order_key.equals(context.getString(R.string.pref_sort_top_rated_key)))
+            return NetworkUtilities.getTopRatedUrl();
+
+        else
+            return null;
+    }
 
     public static URL getPopularUrl(){
         Uri uri = Uri.parse(API_BASE_URL).buildUpon()

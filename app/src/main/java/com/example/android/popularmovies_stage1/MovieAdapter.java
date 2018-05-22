@@ -18,14 +18,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     final private MovieClickListener mOnMovieClickListener;
 
-    private int mNumberItems;
-
-
     private ArrayList<Movie> movies;
 
-    public MovieAdapter(ArrayList<Movie> movies, int numberOfItems, MovieClickListener listener){
+    private final String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/";
+
+    public MovieAdapter(ArrayList<Movie> movies, MovieClickListener listener){
         mOnMovieClickListener = listener;
-        mNumberItems = numberOfItems;
         this.movies = movies;
     }
 
@@ -49,18 +47,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-        String t = "";
-        if(movies.size() > position){
-            t = movies.get(position).getOriginal_title();
-
-        }
-
-        holder.bind(position, t);
+        holder.bind(position);
     }
 
     @Override
     public int getItemCount() {
-        return mNumberItems;
+        return movies.size();
     }
 
 
@@ -79,8 +71,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
             this.context = context;
 
-            tv = (TextView) itemView.findViewById(R.id.tvtvtv);
-
             imageView = (ImageView) itemView.findViewById(R.id.imgv_movie);
 
             itemView.setOnClickListener(this);
@@ -89,11 +79,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         }
 
-        void bind(int pos, String title){
+        void bind(int pos){
             if(movies.size() > pos){
-                tv.setText(title);
+                Picasso.with(context).load( POSTER_BASE_URL + movies.get(pos).getPoster_path()).into(imageView);
             }
-            // Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(imageView);
 
 
         }

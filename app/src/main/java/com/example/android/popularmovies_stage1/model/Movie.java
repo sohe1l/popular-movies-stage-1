@@ -1,9 +1,12 @@
 package com.example.android.popularmovies_stage1.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Movie {
+public class Movie implements Parcelable{
 
     private int vote_count;
     private double vote_average;
@@ -175,6 +178,83 @@ public class Movie {
             this.release_date = null;
         }
     }
+
     //</editor-fold>
+
+
+    /**
+     * Describe the kinds of special objects contained in this Parcelable
+     * instance's marshaled representation. For example, if the object will
+     * include a file descriptor in the output of {@link #writeToParcel(Parcel, int)},
+     * the return value of this method must include the
+     * {@link #CONTENTS_FILE_DESCRIPTOR} bit.
+     *
+     * @return a bitmask indicating the set of special object types marshaled
+     * by this Parcelable object instance.
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(vote_count);
+        dest.writeDouble(vote_average);
+        dest.writeDouble(popularity);
+        dest.writeInt(id);
+        dest.writeValue(video);
+        dest.writeString(title);
+        dest.writeString(poster_path);
+        dest.writeString(original_language);
+        dest.writeString(original_title);
+     //   dest.writeStringArray(genre_ids);
+        dest.writeString(backdrop_path);
+        dest.writeValue(adult);
+        dest.writeString(overview);
+        dest.writeString(release_date.toString());
+    }
+
+
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+    public Movie() {
+    }
+
+    public Movie(Parcel in) {
+
+        vote_count = in.readInt();
+        vote_average = in.readDouble();
+        popularity = in.readDouble();
+        id = in.readInt();
+        video = (Boolean) in.readValue(null);
+        title = in.readString();
+        poster_path = in.readString();
+        original_language = in.readString();
+        original_title = in.readString();
+//        in.readStringArray(genre_ids);
+        backdrop_path = in.readString();
+        adult = (Boolean) in.readValue(null);
+        overview = in.readString();
+        setRelease_date(in.readString());
+    }
+
+
 
 }
