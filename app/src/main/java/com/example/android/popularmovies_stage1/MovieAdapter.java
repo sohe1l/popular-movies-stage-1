@@ -20,9 +20,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     private ArrayList<Movie> movies;
 
-    private final String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/";
 
-    public MovieAdapter(ArrayList<Movie> movies, MovieClickListener listener){
+    MovieAdapter(ArrayList<Movie> movies, MovieClickListener listener){
         mOnMovieClickListener = listener;
         this.movies = movies;
     }
@@ -40,9 +39,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         View view = inflater.inflate(R.layout.movie_item, parent, false);
 
-        MovieViewHolder viewHolder = new MovieViewHolder(view, context);
-
-        return viewHolder;
+        return new MovieViewHolder(view, context);
     }
 
     @Override
@@ -54,10 +51,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public int getItemCount() {
         return movies.size();
     }
-
-
-
-
 
     class MovieViewHolder extends  RecyclerView.ViewHolder
         implements View.OnClickListener{
@@ -74,17 +67,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             imageView = (ImageView) itemView.findViewById(R.id.imgv_movie);
 
             itemView.setOnClickListener(this);
-
-
-
         }
 
         void bind(int pos){
             if(movies.size() > pos){
-                Picasso.with(context).load( POSTER_BASE_URL + movies.get(pos).getPoster_path()).into(imageView);
+                Picasso.with(context).load( Movie.POSTER_BASE_URL + movies.get(pos).getPoster_path())
+                        .placeholder(R.drawable.ic_cloud_queue_black_24dp)
+                        .error(R.drawable.ic_error_outline_black_24dp)
+                        .into(imageView);
             }
-
-
         }
 
         @Override

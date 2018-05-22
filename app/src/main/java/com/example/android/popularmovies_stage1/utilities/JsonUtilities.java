@@ -12,8 +12,6 @@ import java.util.ArrayList;
 
 public class JsonUtilities {
 
-
-
     public static ArrayList<Movie> parseMovies(String json){
 
         ArrayList<Movie> movies = new ArrayList<>();
@@ -37,37 +35,31 @@ public class JsonUtilities {
 
     }
 
-
-
-
-    public static Movie buildMovie(JSONObject jo){
+    private static Movie buildMovie(JSONObject jo){
 
         try{
-            //JSONObject jo = new JSONObject(json);
-
-
             Movie movie = new Movie();
 
-            movie.setVote_count( jo.getInt("vote_count"));
+            movie.setVote_count( jo.optInt("vote_count"));
 
-            movie.setId(jo.getInt("id"));
+            movie.setId(jo.optInt("id"));
 
-            movie.setVideo(jo.getBoolean("video"));
-            movie.setVote_average(jo.getDouble("vote_average"));
-            movie.setTitle(jo.getString("title"));
-            movie.setPopularity(jo.getDouble("popularity"));
-            movie.setPoster_path(jo.getString("poster_path"));
-            movie.setOriginal_language(jo.getString("original_language"));
+            movie.setVideo(jo.optBoolean("video"));
+            movie.setVote_average(jo.optDouble("vote_average"));
+            movie.setTitle(jo.optString("title"));
+            movie.setPopularity(jo.optDouble("popularity"));
+            movie.setPoster_path(jo.optString("poster_path"));
+            movie.setOriginal_language(jo.optString("original_language"));
 
-            movie.setOriginal_title(jo.getString("original_title"));
+            movie.setOriginal_title(jo.optString("original_title"));
 
             // movie.setGenre_ids();
 
-            movie.setBackdrop_path(jo.getString("backdrop_path"));
-            movie.setAdult(jo.getBoolean("adult"));
+            movie.setBackdrop_path(jo.optString("backdrop_path"));
+            movie.setAdult(jo.optBoolean("adult"));
 
-            movie.setOverview(jo.getString("overview"));
-            movie.setRelease_date(jo.getString("release_date"));
+            movie.setOverview(jo.optString("overview"));
+            movie.setRelease_date(jo.optString("release_date"));
 
             return movie;
 
@@ -76,55 +68,5 @@ public class JsonUtilities {
             return null;
         }
     }
-
-
-
-
-
-        public static Movie parseMovie(String json){
-
-        try{
-            JSONObject jo = new JSONObject(json);
-
-
-            Movie movie = new Movie();
-
-            movie.setVote_count( jo.getInt("vote_count"));
-
-            movie.setId(jo.getInt("id"));
-
-            movie.setVideo(jo.getBoolean("video"));
-            movie.setVote_average(jo.getDouble("vote_average"));
-            movie.setTitle(jo.getString("title"));
-            movie.setPopularity(jo.getDouble("popularity"));
-            movie.setPoster_path(jo.getString("poster_path"));
-            movie.setOriginal_language(jo.getString("original_language"));
-
-            movie.setOriginal_title(jo.getString("original_title"));
-
-            // movie.setGenre_ids();
-
-            movie.setBackdrop_path(jo.getString("backdrop_path"));
-            movie.setAdult(jo.getBoolean("adult"));
-
-            movie.setOverview(jo.getString("overview"));
-            movie.setRelease_date(jo.getString("release_date"));
-
-            return movie;
-
-        }catch(Exception e){
-            e.printStackTrace();
-            return null;
-        }
-
-
-
-
-
-
-    }
-
-
-
 
 }

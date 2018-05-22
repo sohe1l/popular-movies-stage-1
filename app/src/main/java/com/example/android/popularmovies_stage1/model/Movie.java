@@ -2,6 +2,7 @@ package com.example.android.popularmovies_stage1.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,40 +23,16 @@ public class Movie implements Parcelable{
     private String original_language;
     private String original_title;
 
-    private String[] genre_ids;
+    private int[] genre_ids;
 
     private String backdrop_path;
     private Boolean adult;
     private String overview;
-    private Date release_date;
+    private String release_date;
 
 
-    /*
-    "vote_count": 3745,
-    "id": 299536,
-    "video": false,
-    "vote_average": 8.5,
-    "title": "Avengers: Infinity War",
-    "popularity": 577.421593,
-    "poster_path": "/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-    "original_language": "en",
-    "original_title": "Avengers: Infinity War",
-    "genre_ids": [
-    12,
-    878,
-    14,
-    28
-    ],
-    "backdrop_path": "/bOGkgRGdhrBYJSLpXaxhXVstddV.jpg",
-    "adult": false,
-    "overview": "As the Avengers and their allies have continued to protect the world from threats too large for any one hero to handle, a new danger has emerged from the cosmic shadows: Thanos. A despot of intergalactic infamy, his goal is to collect all six Infinity Stones, artifacts of unimaginable power, and use them to inflict his twisted will on all of reality. Everything the Avengers have fought for has led up to this moment - the fate of Earth and existence itself has never been more uncertain.",
-    "release_date": "2018-04-25"
-*/
-
-
-
-
-
+    public static final String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/";
+    public static final String BACKDROP_BASE_URL = "http://image.tmdb.org/t/p/w500/";
 
     //<editor-fold desc="Getters and setters">
     public int getVote_count() {
@@ -130,11 +107,11 @@ public class Movie implements Parcelable{
         this.original_title = original_title;
     }
 
-    public String[] getGenre_ids() {
+    public int[] getGenre_ids() {
         return genre_ids;
     }
 
-    public void setGenre_ids(String[] genre_ids) {
+    public void setGenre_ids(int[] genre_ids) {
         this.genre_ids = genre_ids;
     }
 
@@ -162,48 +139,22 @@ public class Movie implements Parcelable{
         this.overview = overview;
     }
 
-    public Date getRelease_date() {
+    public String getRelease_date() {
         return release_date;
     }
 
-    public void setRelease_date(Date release_date) {
-        this.release_date = release_date;
-    }
-
     public void setRelease_date(String release_date) {
-
-        try {
-            this.release_date = new SimpleDateFormat("yyyy-MM-dd").parse(release_date);
-        } catch (Exception e) {
-            this.release_date = null;
-        }
+        this.release_date = release_date;
     }
 
     //</editor-fold>
 
 
-    /**
-     * Describe the kinds of special objects contained in this Parcelable
-     * instance's marshaled representation. For example, if the object will
-     * include a file descriptor in the output of {@link #writeToParcel(Parcel, int)},
-     * the return value of this method must include the
-     * {@link #CONTENTS_FILE_DESCRIPTOR} bit.
-     *
-     * @return a bitmask indicating the set of special object types marshaled
-     * by this Parcelable object instance.
-     */
     @Override
     public int describeContents() {
         return 0;
     }
 
-    /**
-     * Flatten this object in to a Parcel.
-     *
-     * @param dest  The Parcel in which the object should be written.
-     * @param flags Additional flags about how the object should be written.
-     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
-     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(vote_count);
@@ -215,13 +166,12 @@ public class Movie implements Parcelable{
         dest.writeString(poster_path);
         dest.writeString(original_language);
         dest.writeString(original_title);
-     //   dest.writeStringArray(genre_ids);
+        dest.writeIntArray(genre_ids);
         dest.writeString(backdrop_path);
         dest.writeValue(adult);
         dest.writeString(overview);
-        dest.writeString(release_date.toString());
+        dest.writeString(release_date);
     }
-
 
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
 
@@ -234,8 +184,7 @@ public class Movie implements Parcelable{
         }
     };
 
-    public Movie() {
-    }
+    public Movie() { }
 
     public Movie(Parcel in) {
 
@@ -248,13 +197,10 @@ public class Movie implements Parcelable{
         poster_path = in.readString();
         original_language = in.readString();
         original_title = in.readString();
-//        in.readStringArray(genre_ids);
+        genre_ids = in.createIntArray();
         backdrop_path = in.readString();
         adult = (Boolean) in.readValue(null);
         overview = in.readString();
         setRelease_date(in.readString());
     }
-
-
-
 }
