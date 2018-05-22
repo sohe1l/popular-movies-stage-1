@@ -63,7 +63,8 @@
         android:layout_marginTop="@dimen/thin_margin"
         android:layout_marginLeft="@dimen/thin_margin"
         app:layout_constraintStart_toEndOf="@+id/movie_release_date_label"
-        app:layout_constraintTop_toBottomOf="@+id/movie_title_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/movie_title_tv"
+        android:layout_marginStart="@dimen/thin_margin" />
 
     <TextView
         android:id="@+id/movie_vote_average_tv"

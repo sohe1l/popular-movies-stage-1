@@ -9,8 +9,6 @@ import android.widget.TextView;
 import com.example.android.popularmovies_stage1.model.Movie;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 public class MovieDetailActivity extends AppCompatActivity {
 
     @Override

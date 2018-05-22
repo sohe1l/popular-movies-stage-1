@@ -2,8 +2,6 @@ package com.example.android.popularmovies_stage1.utilities;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.example.android.popularmovies_stage1.BuildConfig;
 import com.example.android.popularmovies_stage1.R;
@@ -39,22 +37,22 @@ public class NetworkUtilities {
             return null;
     }
 
-    public static URL getPopularUrl(){
+    private static URL getPopularUrl(){
         Uri uri = Uri.parse(API_BASE_URL).buildUpon()
                 .appendEncodedPath(API_POPULAR_PATH)
                 .appendQueryParameter(API_PARAM, getApiKey())
                 .build();
 
-        return buildURLfromURI(uri);
+        return buildURLFromURI(uri);
     }
 
-    public static URL getTopRatedUrl(){
+    private static URL getTopRatedUrl(){
         Uri uri = Uri.parse(API_BASE_URL).buildUpon()
                 .appendEncodedPath(API_TOP_RATED_PATH)
                 .appendQueryParameter(API_PARAM, getApiKey())
                 .build();
 
-        return buildURLfromURI(uri);
+        return buildURLFromURI(uri);
     }
 
 
@@ -89,7 +87,7 @@ public class NetworkUtilities {
     }
 
 
-    private static URL buildURLfromURI(Uri uri){
+    private static URL buildURLFromURI(Uri uri){
         try{
             return new URL(uri.toString());
         }catch(MalformedURLException e){

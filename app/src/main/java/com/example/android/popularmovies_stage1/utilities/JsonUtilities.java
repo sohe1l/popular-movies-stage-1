@@ -4,7 +4,6 @@ package com.example.android.popularmovies_stage1.utilities;
 import com.example.android.popularmovies_stage1.model.Movie;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;

@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.database.MatrixCursor;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +15,6 @@ import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.android.popularmovies_stage1.model.Movie;
 import com.example.android.popularmovies_stage1.utilities.JsonUtilities;
@@ -26,19 +24,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieClickListener {
-
-    private RecyclerView recyclerView;
 
     private final String SORT_ORDER_KEY = "sort_order";
 
     private SharedPreferences sharedPreferences;
 
     private ArrayList<Movie> movies;
-
-    private MovieAdapter movieAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,21 +103,20 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void setSortOrder(String key) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(SORT_ORDER_KEY, key);
-        editor.commit();
+        editor.apply();
     }
 
 
 
     @Override
     public void onMovieClick(int index) {
-        String msg = "item " + index;
         Intent movieDetail = new Intent(this, MovieDetailActivity.class);
         movieDetail.putExtra(getString(R.string.movie_detail_intent_key), movies.get(index));
         startActivity(movieDetail);
     }
 
 
-    public class loadJsonData extends AsyncTask<URL, Void, String>{
+    class loadJsonData extends AsyncTask<URL, Void, String>{
 
         @Override
         protected String doInBackground(URL... urls) {
@@ -155,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private void updateMovies(){
 
-        movieAdapter = new MovieAdapter(movies, this);
+        MovieAdapter movieAdapter = new MovieAdapter(movies, this);
 
         LayoutManager layoutManager;
 
@@ -165,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
              layoutManager = new GridLayoutManager(this, 3);
         }
 
-        recyclerView = (RecyclerView) findViewById(R.id.rv_movies);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_movies);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(movieAdapter);

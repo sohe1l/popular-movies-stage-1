@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.android.popularmovies_stage1.model.Movie;
 import com.squareup.picasso.Picasso;
@@ -23,10 +22,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     MovieAdapter(ArrayList<Movie> movies, MovieClickListener listener){
         mOnMovieClickListener = listener;
-        this.movies = movies;
-    }
-
-    public void setMovies(ArrayList<Movie> movies) {
         this.movies = movies;
     }
 
@@ -55,9 +50,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     class MovieViewHolder extends  RecyclerView.ViewHolder
         implements View.OnClickListener{
 
-        TextView tv;
-        ImageView imageView;
-        Context context;
+        final ImageView imageView;
+        final Context context;
 
         MovieViewHolder(View itemView, Context context) {
             super(itemView);

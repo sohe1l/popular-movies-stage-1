@@ -2,10 +2,6 @@ package com.example.android.popularmovies_stage1.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Movie implements Parcelable{
 
@@ -186,7 +182,7 @@ public class Movie implements Parcelable{
 
     public Movie() { }
 
-    public Movie(Parcel in) {
+    private Movie(Parcel in) {
 
         vote_count = in.readInt();
         vote_average = in.readDouble();
