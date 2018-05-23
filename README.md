@@ -7,3 +7,4 @@ Android app to discover the most popular movies playing.
 * Open gradle.properties in any texteditor and update the MoviedbAPIKey variable.
 
 
+![alt text](https://preview.ibb.co/cA3ST8/image.png)
