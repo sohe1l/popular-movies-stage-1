@@ -18,6 +18,7 @@ import android.view.MenuItem;
 
 import com.example.android.popularmovies_stage1.model.Movie;
 import com.example.android.popularmovies_stage1.utilities.JsonUtilities;
+import com.example.android.popularmovies_stage1.utilities.LoadJsonAsync;
 import com.example.android.popularmovies_stage1.utilities.NetworkUtilities;
 
 import java.io.IOException;
@@ -25,7 +26,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieClickListener {
+public class MainActivity extends AppCompatActivity
+        implements MovieAdapter.MovieClickListener, LoadJsonAsync.StringAsyncResponse {
 
     private final String SORT_ORDER_KEY = "sort_order";
 
@@ -116,34 +118,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
 
-    class loadJsonData extends AsyncTask<URL, Void, String>{
-
-        @Override
-        protected String doInBackground(URL... urls) {
-            String jsonResult = "";
-            try{
-                jsonResult = NetworkUtilities.getResponseFromHttpUrl(urls[0]);
-
-            }catch(IOException e){
-                e.printStackTrace();
-            }
-            return jsonResult;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            if(s != null && !s.equals("")){
-                Log.i("TEST", s);
-            }
-
-            movies = JsonUtilities.parseMovies(s);
-            updateMovies();
-
-
-        }
-    }
 
     private void updateMovies(){
 
@@ -166,9 +140,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
 
     private void refreshMovies(){
-        new loadJsonData().execute(
+        new LoadJsonAsync(this).execute(
                 NetworkUtilities.getUrl(getSortOrder(), this)
         );
     }
 
+    @Override
+    public void asyncProcessFinish(String res) {
+        movies = JsonUtilities.parseMovies(res);
+        updateMovies();
+    }
 }
