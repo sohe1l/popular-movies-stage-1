@@ -25,6 +25,9 @@ public class NetworkUtilities {
 
     private static final String API_PARAM = "api_key";
 
+    private static final int TIMEOUT = 5009;
+
+
 
     public static URL getUrl(String sort_order_key, Context context){
         if(sort_order_key.equals(context.getString(R.string.pref_sort_popular_key)))
@@ -61,8 +64,8 @@ public class NetworkUtilities {
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
-        urlConnection.setConnectTimeout(5000);
-        urlConnection.setReadTimeout(10000);
+        urlConnection.setConnectTimeout(TIMEOUT);
+        urlConnection.setReadTimeout(TIMEOUT);
 
         try {
             InputStream in = urlConnection.getInputStream();

@@ -1,30 +1,25 @@
 package com.example.android.popularmovies_stage1;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.os.AsyncTask;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.LayoutManager;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import com.example.android.popularmovies_stage1.model.Movie;
+import com.example.android.popularmovies_stage1.utilities.NetworkUtilities;
 import com.example.android.popularmovies_stage1.utilities.JsonUtilities;
 import com.example.android.popularmovies_stage1.utilities.LoadJsonAsync;
-import com.example.android.popularmovies_stage1.utilities.NetworkUtilities;
-
-import java.io.IOException;
-import java.net.URL;
+import android.support.v7.widget.RecyclerView.LayoutManager;
+import com.example.android.popularmovies_stage1.model.Movie;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.preference.PreferenceManager;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.DialogInterface;
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.view.MenuItem;
 import java.util.ArrayList;
+import android.os.Bundle;
+import android.view.Menu;
 import java.util.Arrays;
+
 
 public class MainActivity extends AppCompatActivity
         implements MovieAdapter.MovieClickListener, LoadJsonAsync.StringAsyncResponse {
