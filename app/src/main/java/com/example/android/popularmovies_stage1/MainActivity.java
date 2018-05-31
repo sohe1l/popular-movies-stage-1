@@ -9,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.DialogInterface;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 import android.os.Bundle;
 import android.view.Menu;
 import java.util.Arrays;
+
+
 
 
 public class MainActivity extends AppCompatActivity
@@ -35,6 +38,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         refreshMovies();
@@ -44,7 +50,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -55,34 +60,15 @@ public class MainActivity extends AppCompatActivity
         int selected = item.getItemId();
 
         switch (selected) {
-            case R.id.action_change_sort_order:
 
-                final String[] listLabels = getResources().getStringArray(R.array.pref_order_labels);
-                final String[] listKeys = getResources().getStringArray(R.array.pref_order_keys);
+            case R.id.action_sort_popular:
+                setSortOrder(getString(R.string.pref_sort_popular_key));
+                refreshMovies();
+                break;
 
-                final int current_selected_key = Arrays.binarySearch(listKeys, getSortOrder());
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.pref_sort_title))
-                    .setSingleChoiceItems(
-                            listLabels
-                            , current_selected_key
-                            , new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    setSortOrder( listKeys[which] );
-                                }
-                            })
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if(current_selected_key != Arrays.binarySearch(listKeys, getSortOrder())) {
-                                refreshMovies();
-                            }
-                        }
-                    });
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
+            case R.id.action_sort_top_rated:
+                setSortOrder(getString(R.string.pref_sort_top_rated_key));
+                refreshMovies();
                 break;
         }
 
